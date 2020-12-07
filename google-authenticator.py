@@ -5,10 +5,14 @@ import hmac, base64, struct, hashlib, time, json, os
 def get_hotp_token(secret, intervals_no):
 	"""This is where the magic happens."""
 	key = base64.b32decode(normalize(secret), True) # True is to fold lower into uppercase
+        print([ord(c) for c in key])
 	msg = struct.pack(">Q", intervals_no)
+        print([ord(c) for c in msg])
 	h = bytearray(hmac.new(key, msg, hashlib.sha1).digest())
+        print([c for c in h])
 	o = h[19] & 15
 	h = str((struct.unpack(">I", h[o:o+4])[0] & 0x7fffffff) % 1000000)
+        print(h)
 	return prefix0(h)
 
 
